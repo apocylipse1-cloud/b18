@@ -1170,8 +1170,6 @@ select.input-inset {
   transform: translateZ(0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  /* Ensure video plays inline on iOS */
-  -webkit-playsinline: true;
   /* Prevent iOS from showing video controls */
   -webkit-media-controls: none;
   -webkit-media-controls-panel: none;
@@ -1185,6 +1183,9 @@ select.input-inset {
   height: 100% !important;
   object-fit: cover !important;
   object-position: center center !important;
+  /* iOS specific video attributes */
+  -webkit-playsinline: true !important;
+  playsinline: true !important;
 }
 
 /* iOS Safari specific fixes */
@@ -1193,6 +1194,9 @@ select.input-inset {
     /* Additional iOS-specific optimizations */
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     mask-image: radial-gradient(white, black);
+    /* Ensure proper video rendering */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -1204,6 +1208,8 @@ select.input-inset {
         /* Ensure proper scaling on mobile */
         min-width: 100% !important;
         min-height: 100% !important;
+        /* Force video to stay active */
+        pointer-events: none;
     }
     
     /* Prevent hero inline video from zooming on mobile */
@@ -1215,6 +1221,11 @@ select.input-inset {
         height: 100% !important;
         min-width: auto !important;
         min-height: auto !important;
+        /* iOS specific inline video fixes */
+        -webkit-playsinline: true !important;
+        playsinline: true !important;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
