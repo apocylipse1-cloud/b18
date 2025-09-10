@@ -19,69 +19,6 @@ import gsap from 'gsap'
 const Home = () => {
   const heroSectionRef = useRef(null)
 
-  // iOS video autoplay optimization
-  useEffect(() => {
-    let interactionHandled = false;
-    
-    const handleUserInteraction = () => {
-      if (interactionHandled) return;
-      interactionHandled = true;
-      
-      // Find all videos and attempt to play them after user interaction
-      const videos = document.querySelectorAll('video');
-      videos.forEach(video => {
-        // Configure for iOS
-        video.setAttribute('playsinline', 'true');
-        video.setAttribute('webkit-playsinline', 'true');
-        video.muted = true;
-        
-        if (video.paused) {
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(error => {
-              console.warn('Video play failed after user interaction:', error);
-              // Retry after short delay
-              setTimeout(() => {
-                video.play().catch(() => {
-                  console.warn('Video retry failed');
-                });
-              }, 100);
-            });
-          }
-        }
-      });
-      
-      // Remove event listeners after first interaction
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
-    };
-
-    // Add event listeners for user interaction on iOS
-    document.addEventListener('touchstart', handleUserInteraction, { passive: true });
-    document.addEventListener('click', handleUserInteraction, { passive: true });
-    document.addEventListener('scroll', handleUserInteraction, { passive: true });
-    
-    // Also try to play videos after a delay (for cases where autoplay might work)
-    const delayedPlay = setTimeout(() => {
-      const videos = document.querySelectorAll('video');
-      videos.forEach(video => {
-        if (video.paused) {
-          video.play().catch(() => {
-            // Silent fail - user interaction will handle it
-          });
-        }
-      });
-    }, 1000);
-
-    return () => {
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
-      clearTimeout(delayedPlay);
-    };
-  }, []);
-
   useGSAP(() => {
     // Smooth fade-in animation for hero content
     gsap.fromTo('.hero-content', 
